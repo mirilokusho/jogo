@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Joguinho</title>
+        <style>
+            body
+            {
+                text-align: center;
+                background-color: #000000;
+            }
+        </style>
+        <script language="JavaScript" type="text/javascript">
+            var objCanvas = null
+            var objContexto = null
+            
+            var imgFundo = new Image()
+            imgFundo.src = "Img/fundo.png" 
+
+            function Iniciar()
+            {
+                objCanvas = document.getElementById("meuCanvas")
+                objContexto = objCanvas.getContext("2d")
+
+                AtualizarTela()
+                
+                alert('Fuja da abelha e capture a coroa! Boa sorte !')
+            }
+
+            var xHeroi = 100
+            var yHeroi = 100
+
+            var xMonstro = 350
+            var yMonstro = 370
+
+            var imgHeroi = new Image()
+            imgHeroi.src = "Img/heroi_parado.png"
+
+            var imgMonstro = new Image()
+            imgMonstro.src = "Img/abelha.png"
+
+            var imgArbusto = new Image()
+            imgArbusto.src = "Img/arbusto1.png"
+
+            var imgFlor = new Image()
+            imgFlor.src = "Img/flor.png"
+
+            var imgCoroa = new Image()
+            imgCoroa.src = "Img/coroa.png"
+
+            var xCoroa = 400
+            var yCoroa = 400
+
+            var pontoHeroi = 0
+            var pontoAbelha = 0
+
+            function AtualizarTela()
+            {
+                // desenha no canvas os objetos
+                objContexto.drawImage(imgFundo, 0, 0)
+                objContexto.drawImage(imgHeroi, xHeroi, yHeroi)
+                objContexto.drawImage(imgMonstro, xMonstro, yMonstro)
+                objContexto.drawImage(imgArbusto, 200, 200)
+                objContexto.drawImage(imgArbusto, 232, 200)
+                objContexto.drawImage(imgArbusto, 232, 226)
+                objContexto.drawImage(imgArbusto, 200, 226)
+                objContexto.drawImage(imgFlor, 300, 40)
+                objContexto.drawImage(imgFlor, 102, 400)
+                objContexto.drawImage(imgCoroa, xCoroa, yCoroa)
+
+                // placar
+                objContexto.strokeText(`${pontoHeroi} - ${pontoAbelha}`, 350, 100)
+                objContexto.font = "50px Arial"
+            }
+
+            var direcao = 0
+
+            function MovimentoDoMonstro()
+            {
+                // monstro persegue herói, primeiramente se posicionando no mesmo eixo x do herói e segundamente ele tenta se posicionar no mesmo eixo y
+                if (xMonstro > xHeroi)
+                {
+                    xMonstro = xMonstro - 10
+                    AtualizarTela()
+                }
+
+                if (xMonstro < xHeroi)
+                {
+                    xMonstro = xMonstro + 10
+                    AtualizarTela()
+                }
+
+                if (xMonstro == xHeroi)
+                {
+                    if (yMonstro > yHeroi)
+                    {
+                        yMonstro = yMonstro - 10
+                        AtualizarTela()
+                    }
+
+                    if (yMonstro < yHeroi)
+                    {
+                        yMonstro = yMonstro + 10
+                        AtualizarTela()
+                    }
+                }
+            }
+
+            // realiza o movimento do monstro a cada 200 milissegundos
+            var movimentacao = setInterval(MovimentoDoMonstro, 200);
+
+            // variáveis auxiliares para ajudar na animação de movimento do herói
+            var numero = 0
+            var numero2 = 0
+            var numero3 = 0
+            var numero4 = 0
+
+            // movimento do heroi
+            document.addEventListener("keydown", (event) =>
+            {
+                switch (event.keyCode)
+                {
+                    case 37: 
+                        if (xHeroi >= 0)
+                        {
+                            switch (numero)
+                            {
+                                case 0: imgHeroi.src = "Img/heroi_esq_parado.png"; numero++; break;
+                                case 1: imgHeroi.src = "Img/heroi_esq.png"; numero--; break;
+                            }
+                            xHeroi = (xHeroi - 10);
+                            AtualizarTela()
+                            break;
+                        }
+                    case 38: 
+                        if (yHeroi >= 0)
+                        {
+                            switch (numero2)
+                            {
+                                case 0: imgHeroi.src = "Img/heroi_costas_parado.png"; numero2++; break;
+                                case 1: imgHeroi.src = "Img/heroi_costas.png"; numero2++; break;
+                                case 2: imgHeroi.src = "Img/heroi_costas_parado.png"; numero2++; break;
+                                case 3: imgHeroi.src = "Img/heroi_costas2.png"; numero2 = 0; break;
+                            }
+                            yHeroi = (yHeroi - 10);
+                            AtualizarTela()
+                            break;
+                        }
+                    case 39: 
+                        if (xHeroi <= 490)
+                        {
+                            switch (numero3)
+                            {
+                                case 0: imgHeroi.src = "Img/heroi_dire_parado.png"; numero3++; break;
+                                case 1: imgHeroi.src = "Img/heroi_dire.png"; numero3--; break;
+                            }
+                            xHeroi = (xHeroi + 10);
+                            AtualizarTela()
+                            break;
+                        }
+                    case 40: 
+                        if (yHeroi <= 440)
+                        {
+                            switch (numero4)
+                            {
+                                case 0: imgHeroi.src = "Img/heroi_parado.png"; numero4++; break;
+                                case 1: imgHeroi.src = "Img/heroi.png"; numero4++; break;
+                                case 2: imgHeroi.src = "Img/heroi_parado.png"; numero4++; break;
+                                case 3: imgHeroi.src = "Img/heroi_2.png"; numero4 = 0; break;
+                            }
+                            yHeroi = (yHeroi + 10);
+                            AtualizarTela()
+                            break;
+                        }
+                }
+
+                AtualizarTela()
+
+                EncontrouMonstro()
+                EncontrouCoroa()
+            })
+
+            function EncontrouMonstro()
+            {
+                // jogador perde
+                if(xHeroi + 50 > xMonstro && xHeroi < xMonstro + 50 && yHeroi + 50 > yMonstro && yHeroi < yMonstro + 50)
+                {
+                    pontoAbelha++
+
+                    AtualizarTela()
+
+                    alert('Oh não! Você foi pego(a) pela Abelha malvada!')
+
+                    Reiniciar()
+                }
+            }
+
+            function EncontrouCoroa()
+            {
+                // jogador ganha
+                if (xHeroi + 32 > xCoroa && xHeroi < xCoroa + 32 && yHeroi + 32 > yCoroa && yHeroi < yCoroa + 32)
+                {
+                    pontoHeroi++
+
+                    alert('Parabéns!! Você conseguiu capturar a coroa!')
+
+                    Reiniciar()
+                }
+            }
+
+            function Reiniciar()
+            {
+                // reposiciona monstro e herói
+                xHeroi = 100
+                yHeroi = 100
+
+                xMonstro = 350
+                yMonstro = 370
+
+                AtualizarTela()
+            }
+            
+        </script>
+
+    </head>
+
+    <body onLoad="Iniciar()">
+        <canvas id="meuCanvas" width="512" height="480" style="border:1px solid #000000"></canvas>
+    </body>
+</html>
